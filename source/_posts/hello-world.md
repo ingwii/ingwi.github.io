@@ -1,4 +1,5 @@
 title: Hello World
+categories: Other
 ---
 Welcome to [Hexo](http://hexo.io/)! This is your very first post. Check [documentation](http://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](http://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 
@@ -35,3 +36,5 @@ $ hexo deploy
 ```
 
 More info: [Deployment](http://hexo.io/docs/deployment.html)
+
+![image](http://s.cn.bing.net/az/hprichbg/rb/ElevatedViewOfCasinos_ZH-CN9956621119_1920x1080.jpg)

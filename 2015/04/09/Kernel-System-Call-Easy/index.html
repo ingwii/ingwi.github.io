@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Kernel-System Call-Easy | WeiJinliang&#39;s Mini Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Linux Kernel System Call Easy Trial本人能力有限,如果文章中有错误,或需要优化的地方请联系我michaelwii@163.com
+
+Reference 参考资料1234567891.操作原理李继云老师提供的ppt2.http://blog.chinaunix.net/uid-28392723-id-3520177.html3.http://rpmfind.net/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kernel-System Call-Easy">
+<meta property="og:url" content="http://www.weijinliang.cn/2015/04/09/Kernel-System-Call-Easy/index.html">
+<meta property="og:site_name" content="WeiJinliang's Mini Blog">
+<meta property="og:description" content="Linux Kernel System Call Easy Trial本人能力有限,如果文章中有错误,或需要优化的地方请联系我michaelwii@163.com
+
+Reference 参考资料1234567891.操作原理李继云老师提供的ppt2.http://blog.chinaunix.net/uid-28392723-id-3520177.html3.http://rpmfind.net/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kernel-System Call-Easy">
+<meta name="twitter:description" content="Linux Kernel System Call Easy Trial本人能力有限,如果文章中有错误,或需要优化的地方请联系我michaelwii@163.com
+
+Reference 参考资料1234567891.操作原理李继云老师提供的ppt2.http://blog.chinaunix.net/uid-28392723-id-3520177.html3.http://rpmfind.net/">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">WeiJinliang&#39;s Mini Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">魏金亮迷你博客--原谅我的傲慢无礼，年少轻狂.因为我有一个奋斗的梦想.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="q" value="site:http://www.weijinliang.cn"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Kernel-System-Call-Easy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/09/Kernel-System-Call-Easy/" class="article-date">
+  <time datetime="2015-04-09T09:51:29.000Z" itemprop="datePublished">2015-04-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Computer-Science/">Computer Science</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Kernel-System Call-Easy
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Linux_Kernel_System_Call_Easy_Trial">Linux Kernel System Call Easy Trial</h1><p>本人能力有限,如果文章中有错误,或需要优化的地方请联系我michaelwii@163.com</p>
+<hr>
+<h2 id="Reference_参考资料">Reference 参考资料</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.操作原理李继云老师提供的ppt</span><br><span class="line"><span class="number">2</span><span class="class">.http</span>:<span class="comment">//blog.chinaunix.net/uid-28392723-id-3520177.html</span></span><br><span class="line"><span class="number">3</span><span class="class">.http</span>:<span class="comment">//rpmfind.net/linux/rpm2html/search.php?query=ncurses-devel</span></span><br><span class="line"><span class="number">4</span><span class="class">.kernel3</span>.<span class="number">4.106</span>: https:<span class="comment">//www.kernel.org/pub/linux/kernel/v3.x/linux-3.4.106.tar.xz</span></span><br><span class="line"><span class="number">5</span><span class="class">.http</span>:<span class="comment">//www.jb51.net/LINUXjishu/34604.html</span></span><br><span class="line"><span class="number">6</span>.vim查找: http:<span class="comment">//blog.csdn.net/hitustc/article/details/5585101: </span></span><br><span class="line"><span class="number">7</span>.内核调试: http:<span class="comment">//bbs.chinaunix.net/thread-3610322-1-1.html</span></span><br><span class="line"><span class="number">8</span><span class="class">.printfk</span>: http:<span class="comment">//blog.csdn.net/hunanchenxingyu/article/details/7964517</span></span><br><span class="line"><span class="number">9</span><span class="class">.printfk</span>: http:<span class="comment">//blog.chinaunix.net/uid-28253945-id-3672651.html</span></span><br></pre></td></tr></table></figure>
+<h2 id="Compile_Kernel_编译内核">Compile Kernel 编译内核</h2><blockquote>
+<p>前言:编程后的步骤是,编译-&gt;链接-&gt;执行. 所以进行内核编程后的关键步骤就是编译链接内核.需要说明的是,本次试验我采用的是Debian 7.8,其中内核版本为3.2. 然后我在Kernel.org上下载了3.4.106的kernel版本,并更新了Debian7.8的内核.SystemCall的试验也是在该版本的内核源码下修改的.<code>参考资料</code>提供了相关发行版和内核的下载链接.有需要的朋友可以收下~如果是初学者,建议使用相同环境学习.这样可以避免很多不必要的麻烦.</p>
+</blockquote>
+<h4 id="Kernel_Simple_Summary_内核简述:">Kernel Simple Summary 内核简述:</h4><p>Linux的内核中Makefile采用自顶向下,类似树的方式编译内核.所以make操作一定要在源代码/根目录下操作.<code>以下的根目录都指的是源代码下的根目录</code></p>
+<h4 id="Check_Kernel_Version_查看内核版本:">Check Kernel Version 查看内核版本:</h4><p>这是需要学会的, 一般情况是不可以降级内核的(我没有试过).因为内核上层的应用中可能会调用新版本内核中的接口等,而旧版本内核是不支持的.所以一般情况都是升级.本次升级内核是3.2-&gt;3.4</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//三选一吧~</span><br><span class="line">cat /<span class="keyword">proc</span>/version </span><br><span class="line">uname -r</span><br><span class="line">uname -a</span><br></pre></td></tr></table></figure>
+<h4 id="Download_Kernel_Source_下载内核源码,解压缩-xz-tar">Download Kernel Source 下载内核源码,解压缩.xz.tar</h4><p>下载大家都会的,wget,迅雷都行.主要是讲一下怎么解压.tar.xz的文件.kernel.org上下载下来的文件只有50M,可是解压缩以后就有400+M, 这个.xz的压缩格式要厉害啊~ 因为不是重点,这里我没有仔细去研究,感兴趣的朋友可以研究一下压缩算法什么的,研究好以后email我呗~哈哈</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//压缩命令如下,依次使用</span></span><br><span class="line">xz -d xxxxx<span class="class">.tar</span><span class="class">.xz</span></span><br><span class="line">tar xvf xxxxx.tar</span><br></pre></td></tr></table></figure>
+<p>解压在<code>/usr/src/</code></p>
+<h4 id="First_Compiling_-_Details_第一次编译内核详细步骤">First Compiling - Details 第一次编译内核详细步骤</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#make</span> mrproper	<span class="comment">//清楚编译痕迹, 会删除.config文件</span></span><br><span class="line"><span class="id">#make</span> menuconfig	<span class="comment">//还可以采用xconfig等,生成.config配置文件</span></span><br><span class="line"><span class="comment">/*</span><br><span class="line">	注意:如果提示没有ncurses的话,那么在Ubuntu/Debian环境下可以执行</span><br><span class="line">	#apt-get install libncurses5-dev</span><br><span class="line">	安装结束后,在执行menuconfig</span><br><span class="line"> */</span></span><br><span class="line"><span class="id">#make</span> bzImage</span><br><span class="line"><span class="id">#make</span> modules</span><br><span class="line"><span class="id">#make</span> modules_install</span><br><span class="line"><span class="id">#make</span> install</span><br><span class="line"><span class="id">#reboot</span>	<span class="comment">//grub引导重启, 选择新的内核版本</span></span><br></pre></td></tr></table></figure>
+<p>按照上述步骤,依次编译后,就会在<code>/boot/</code>下生成三个文件</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config-<span class="number">3.4</span>.<span class="number">106</span></span><br><span class="line">System<span class="class">.map-3</span>.<span class="number">4.106</span></span><br><span class="line">vmlinuz-<span class="number">3.4</span>.<span class="number">106</span></span><br></pre></td></tr></table></figure>
+<p>然后查看<code>/boot/grub/grub.cfg</code>,就会多出下面一段代码(install时自动添加的)</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">menuentry <span class="string">'Debian GNU/Linux, with Linux 3.4.106'</span> --<span class="keyword">class</span> debian --<span class="keyword">class</span> gnu-linux --<span class="keyword">class</span> gnu --<span class="keyword">class</span> os &#123;</span><br><span class="line">        load_video</span><br><span class="line">        insmod gzio</span><br><span class="line">        insmod part_msdos</span><br><span class="line">        insmod ext2</span><br><span class="line">        set root=<span class="string">'(hd0,msdos1)'</span></span><br><span class="line">        search --no-floppy --fs-uuid --set=root f957a2b6-<span class="number">9</span>dfc-<span class="number">486</span>f-a2ba-eb499fa462e9</span><br><span class="line">        echo    <span class="string">'Loading Linux 3.4.106 ...'</span></span><br><span class="line">        linux   <span class="regexp">/boot/</span>vmlinuz-<span class="number">3.4</span>.<span class="number">106</span> root=UUID=f957a2b6-<span class="number">9</span>dfc-<span class="number">486</span>f-a2ba-eb499fa462e9 ro  quiet</span><br><span class="line">        echo    <span class="string">'Loading initial ramdisk ...'</span></span><br><span class="line">        initrd  <span class="regexp">/boot/i</span>nitrd.img-<span class="number">3.4</span>.<span class="number">106</span></span><br><span class="line">&#125;</span><br><span class="line">menuentry <span class="string">'Debian GNU/Linux, with Linux 3.4.106 (recovery mode)'</span> --<span class="keyword">class</span> debian --<span class="keyword">class</span> gnu-linux --<span class="keyword">class</span> gnu --<span class="keyword">class</span> os &#123;</span><br><span class="line">        load_video</span><br><span class="line">        insmod gzio</span><br><span class="line">        insmod part_msdos</span><br><span class="line">        insmod ext2</span><br><span class="line">        set root=<span class="string">'(hd0,msdos1)'</span></span><br><span class="line">        search --no-floppy --fs-uuid --set=root f957a2b6-<span class="number">9</span>dfc-<span class="number">486</span>f-a2ba-eb499fa462e9</span><br><span class="line">        echo    <span class="string">'Loading Linux 3.4.106 ...'</span></span><br><span class="line">        linux   <span class="regexp">/boot/</span>vmlinuz-<span class="number">3.4</span>.<span class="number">106</span> root=UUID=f957a2b6-<span class="number">9</span>dfc-<span class="number">486</span>f-a2ba-eb499fa462e9 ro single</span><br><span class="line">        echo    <span class="string">'Loading initial ramdisk ...'</span></span><br><span class="line">        initrd  <span class="regexp">/boot/i</span>nitrd.img-<span class="number">3.4</span>.<span class="number">106</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是grub引导linux内核的配置信息.<code>/boot</code>下还有老版本的三个文件,可以删掉.<code>/boot/grub/grub.cfg</code>中还会有老版本内核的引导信息,也可以删掉.另外,生成bzImage和modules的时候十分缓慢,但是可以使用多线程的方式尽可能的所以编译时间,后面会讲.</p>
+<h4 id="Multi-Thread_Compiling_多线程编译内核">Multi-Thread Compiling 多线程编译内核</h4><p>其实就是如下的一个命令,N可以代表线程数,我参考百度的资料另N=15,基本可以使得cpu的利用率达到100%.</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#make</span> -jN xxx	<span class="comment">//<span class="label">xxx是其他在Makefile中描述的规则</span></span></span><br></pre></td></tr></table></figure>
+<h5 id="Use_Cmd_top_to_Check_Cpu_使用top查看cpu使用情况">Use Cmd top to Check Cpu 使用top查看cpu使用情况</h5><p><code>第三行</code>就是描述cpu使用情况的数据,其中(当有多个CPU时，这些内容可能会超过两行):</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$top</span></span><br><span class="line"><span class="comment">//Cpu(s): </span></span><br><span class="line"><span class="comment">//0.3% 	us	用户空间占用CPU百分比</span></span><br><span class="line"><span class="comment">//1.0% 	sy	内核空间占用CPU百分比</span></span><br><span class="line"><span class="comment">//0.0% 	ni	用户进程空间内改变过优先级的进程占用CPU百分比</span></span><br><span class="line"><span class="comment">//98.7% id	空闲CPU百分比</span></span><br><span class="line"><span class="comment">//0.0% 	wa	等待输入输出的CPU时间百分比</span></span><br></pre></td></tr></table></figure>
+<p>更多内容参考参考资料5</p>
+<h2 id="System_Call_系统调用">System Call 系统调用</h2><h4 id="Summary_概述">Summary 概述</h4><pre><code>系统调用的原理非常简单,当用户空间的程序需要调用内核程序时, 是通过一张表(即系统调用表),联系起来的.具体知识请看书啦~下面是如何在内核源码中修改相关信息,来达成系统调用的功能.
+</code></pre><h5 id="为什么要系统调用呢?_(个人理解)">为什么要系统调用呢? (个人理解)</h5><pre><code>最主要的是,系统调用封装出了接口供上层软件使用.在对底层硬件或内核机制进行管理的时候非常复杂.从硬件角度讲,需要扎实的硬件知识.从内核实现上说,例如进程控制,调度等是操作系统的核心,核心程序不能有过多的bug,需要非常严谨.所以哪怕是linux的维护者们, 在修改kernel中的.c文件时,哪怕只有非常小的改动都是需要长时间研究,看看其对整个内核影响,会不会造成bug等.所以普通的用户是不需要,也不能去修改系统调用的.所以,这里有着这个操作系统最大的权限,甚至可以控制整个操作系统.也正是因为如此,我们需要在这里编程,更深层次的个性化这个操作系统.
+</code></pre><h4 id="Trial_实验部分">Trial 实验部分</h4><h5 id="Step_1:_声明">Step 1: 声明</h5><p>为我们的函数,在系统调用的头文件中声明一下,在<code>/include/linux/syscalls.h</code>文件末尾的#endif前添加我们的函数声明:</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">asmlinkage <span class="function"><span class="keyword">int</span> <span class="title">sys_HelloWorldCall</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<h5 id="Step_2:_添加系统调用表">Step 2: 添加系统调用表</h5><p>将我们的函数添加进函数调用表,该版本内核分别支持32,64位机器.所以要添加两个.在<code>arch/x86/syscalls/syscall_64.tbl</code>找到最后一个64为系统调用表,在其后添加64位系统调用号:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">312  	64  	helloworld  	sys_HelloWorldCall</span><br></pre></td></tr></table></figure>
+<p><code>arch/x86/syscalls/syscall_32.tbl</code>添加32位系统调用号</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">349  	i386	helloworld		sys_HelloWorldCall</span><br></pre></td></tr></table></figure>
+<h5 id="Step_3:_实现">Step 3: 实现</h5><p>在根目录下创建文件夹和文件:<code>/helloworld/helloworld.c</code>.内容:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//程序内容</span></span><br><span class="line"><span class="comment">//1.输出hello world</span></span><br><span class="line"><span class="comment">//2.输出当前所有进程的进程名, pid, 状态</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/kernel.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/init.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/sched.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/syscalls.h&gt;</span></span><br><span class="line"><span class="function">asmlinkage <span class="keyword">int</span> <span class="title">sys_lsproc</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">struct</span> task_struct *p;</span><br><span class="line">	printk(<span class="string">"Hello World\n"</span>);</span><br><span class="line">	pr_info(<span class="string">"\tProcess\tPid\tState"</span>);</span><br><span class="line">	for_each_process(p)</span><br><span class="line">	&#123;</span><br><span class="line">		pr_info(<span class="string">"%15s\t%u\t%ld"</span>, p-&gt;comm, task_pid_nr(p), p-&gt;state);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0x19950411</span>;<span class="comment">//正好四个字节 嘿嘿</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Step_4:_Makefile">Step 4: Makefile</h5><p>我们自己斜号了一个源文件,但是Makefile并不知道怎么编译我们的源文件,也不知道我们在哪里,所以我们需要写好我们自己的Makefile,还要在/根目录下的Makefile中描述我们的位置. 新建<code>/helloworld/Makefile</code>,在里面添加一句</p>
+<figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">obj-y :</span>=<span class="string"> helloworld.c</span></span><br></pre></td></tr></table></figure>
+<p>然后修改<code>/Makefile</code>.</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">找到 core-y += kernel<span class="regexp">/ mm/</span> fs<span class="regexp">/ ipc/</span> security<span class="regexp">/ crypto/</span> block/</span><br><span class="line">然后再最后添加一个helloworld/</span><br><span class="line">变成 core-y += kernel<span class="regexp">/ mm/</span> fs<span class="regexp">/ ipc/</span> security<span class="regexp">/ crypto/</span> block<span class="regexp">/ lsproc/</span></span><br></pre></td></tr></table></figure>
+<p>(ps:在根目录找查找到这句话也挺费劲,所以要用到vim的查找功能,本文后面再讲)</p>
+<h5 id="Step_5:_Test_System_Call">Step 5: Test System Call</h5><p>自己建一个.c,然后gcc执行以下代码:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> &lt;unistd.h&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> ret;</span><br><span class="line">	ret = syscall(<span class="number">312</span>);</span><br><span class="line">	<span class="keyword">if</span> (ret &lt; <span class="number">0</span>)&#123;</span><br><span class="line">		perror(<span class="string">"HelloWorld Error"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"System Call Return Val:%d"</span>, ret);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//注：312为例子中64位调用号，若为32位环境，可用前述的349</span></span><br></pre></td></tr></table></figure>
+<p>(执行这段程序可能只能看到了Return的Val,这时表示,你已经成功完成系统调用啦~但是没有好像系统调用函数没有输出啊?为什么呢?详情请看文章后面内容.)</p>
+<h4 id="内核调试">内核调试</h4><p>这部分内容十分困难,每次修改源代码以后都要重新编译内核,虽然修改的部分少,但是编译还是很慢.用上多线程以后速度有所提升,但是还是不理想.我也没有研究有什么解决方案. 调试的话,也只能使用printk输出,采用最原始的调试方法.但是可以参考一下参考资料7,8.参考资料8提供了插入内核模块的方式测试单个模块文件</p>
+<h4 id="Others">Others</h4><h5 id="vim中的查找">vim中的查找</h5><p>命令模式下，按<code>/</code>，然后输入要查找的字符. <code>？</code>和 <code>/</code>的区别是，一个向前（下）找，一个向后（上）.更多内容请百度,或者看参考资料6</p>
+<h5 id="解决printk不从终端输出的问题:">解决printk不从终端输出的问题:</h5><h6 id="原因1:日志级别太低">原因1:日志级别太低</h6><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">　　日志级别一共有<span class="number">8</span>个级别，printk的日志级别定义如下（在include/linux/kernel.h中）：</span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_EMERG <span class="number">0</span>	<span class="comment">/*紧急事件消息，系统崩溃之前提示，表示系统不可用*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_ALERT <span class="number">1</span>	<span class="comment">/*报告消息，表示必须立即采取措施*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_CRIT <span class="number">2</span>		<span class="comment">/*临界条件，通常涉及严重的硬件或软件操作失败*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_ERR <span class="number">3</span>		<span class="comment">/*错误条件，驱动程序常用KERN_ERR来报告硬件的错误*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_WARNING <span class="number">4</span>	<span class="comment">/*警告条件，对可能出现问题的情况进行警告*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_NOTICE <span class="number">5</span>	<span class="comment">/*正常但又重要的条件，用于提醒*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_INFO <span class="number">6</span>		<span class="comment">/*提示信息，如驱动程序启动时，打印硬件信息*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_DEBUG <span class="number">7</span>	<span class="comment">/*调试级别的消息*/</span></span><br></pre></td></tr></table></figure>
+<p>用printk，内核会根据日志级别，可能把消息打印到当前控制台上，这个控制台通常是一个字符模式的终端、一个串口打印机或是一个并口打印机。这些消息正常输出的前提是──日志输出级别小于console_loglevel（在内核中数字越小优先级越高）。</p>
+<p>　　没有指定日志级别的printk语句默认采用的级别是 DEFAULT_ MESSAGE_LOGLEVEL（这个默认级别一般为<4>,即与KERN_WARNING在一个级别上），其定义在linux26/kernel/printk.c中可以找到</4></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可用下面的命令设置当前日志级别：</span></span><br><span class="line"># echo <span class="number">8</span> &gt; <span class="regexp">/proc/</span>sys<span class="regexp">/kernel/</span>printk</span><br></pre></td></tr></table></figure>
+<h6 id="原因2:_klogd和syslogd守护进程阻止内核消息(具体内容不是很清楚)">原因2: klogd和syslogd守护进程阻止内核消息(具体内容不是很清楚)</h6>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.weijinliang.cn/2015/04/09/Kernel-System-Call-Easy/" data-id="ci8a4bjal000qekmy81691xqn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kernel/">Kernel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Operationg-System/">Operationg System</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/03/24/Mac-Enviroment-Variables/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Mac Enviroment Variables</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/04/09/Kernel-System-Call-Easy/">Kernel-System Call-Easy</a>
+          </li>
+        
+          <li>
+            <a href="/2015/03/24/Mac-Enviroment-Variables/">Mac Enviroment Variables</a>
+          </li>
+        
+          <li>
+            <a href="/2015/03/21/MarkDown-Syntax/">MarkDown Syntax</a>
+          </li>
+        
+          <li>
+            <a href="/2015/03/21/Hexo/">Hexo</a>
+          </li>
+        
+          <li>
+            <a href="/2015/03/21/Linux-C-Programming/">Linux Programming</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Computer-Science/">Computer Science</a><span class="category-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kernel/">Kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Main-Memmory/">Main-Memmory</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/">Markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OSX10-10/">OSX10.10</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Operating-System/">Operating-System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Operationg-System/">Operationg System</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Other/">Other</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Repost/">Repost</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Terminal/">Terminal</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">6</span></li></ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 IngWii<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

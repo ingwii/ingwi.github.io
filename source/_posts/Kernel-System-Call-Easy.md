@@ -17,8 +17,8 @@ categories: Computer Science
 	5.http://www.jb51.net/LINUXjishu/34604.html
 	6.vim查找: http://blog.csdn.net/hitustc/article/details/5585101: 
 	7.内核调试: http://bbs.chinaunix.net/thread-3610322-1-1.html
-	8.printfk: http://blog.csdn.net/hunanchenxingyu/article/details/7964517
-	9.printfk: http://blog.chinaunix.net/uid-28253945-id-3672651.html
+	8.printk: http://blog.csdn.net/hunanchenxingyu/article/details/7964517
+	9.printk: http://blog.chinaunix.net/uid-28253945-id-3672651.html
 ```
 ##Compile Kernel 编译内核
 

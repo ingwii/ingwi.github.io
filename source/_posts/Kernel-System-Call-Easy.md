@@ -234,6 +234,10 @@ menuentry 'Debian GNU/Linux, with Linux 3.4.106 (recovery mode)' --class debian 
 
 ```
 	//可用下面的命令设置当前日志级别：
-	# echo 8 > /proc/sys/kernel/printk
+	#echo 8 > /proc/sys/kernel/printk
+	或运行下面命令直接查看信息
+	#dmesg
+	或者在printk中加上"<0>"
+	printk("<0>""HelloWorld");
 ```
 ######原因2: klogd和syslogd守护进程阻止内核消息(具体内容不是很清楚)

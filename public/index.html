@@ -131,12 +131,12 @@
 <h5 id="解决printk不从终端输出的问题:">解决printk不从终端输出的问题:</h5><h6 id="原因1:日志级别太低">原因1:日志级别太低</h6><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">　　日志级别一共有<span class="number">8</span>个级别，printk的日志级别定义如下（在include/linux/kernel.h中）：</span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_EMERG <span class="number">0</span>	<span class="comment">/*紧急事件消息，系统崩溃之前提示，表示系统不可用*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_ALERT <span class="number">1</span>	<span class="comment">/*报告消息，表示必须立即采取措施*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_CRIT <span class="number">2</span>		<span class="comment">/*临界条件，通常涉及严重的硬件或软件操作失败*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_ERR <span class="number">3</span>		<span class="comment">/*错误条件，驱动程序常用KERN_ERR来报告硬件的错误*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_WARNING <span class="number">4</span>	<span class="comment">/*警告条件，对可能出现问题的情况进行警告*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_NOTICE <span class="number">5</span>	<span class="comment">/*正常但又重要的条件，用于提醒*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_INFO <span class="number">6</span>		<span class="comment">/*提示信息，如驱动程序启动时，打印硬件信息*/</span></span><br><span class="line"></span><br><span class="line">　　<span class="hexcolor">#def</span>ine KERN_DEBUG <span class="number">7</span>	<span class="comment">/*调试级别的消息*/</span></span><br></pre></td></tr></table></figure>
 <p>用printk，内核会根据日志级别，可能把消息打印到当前控制台上，这个控制台通常是一个字符模式的终端、一个串口打印机或是一个并口打印机。这些消息正常输出的前提是──日志输出级别小于console_loglevel（在内核中数字越小优先级越高）。</p>
 <p>　　没有指定日志级别的printk语句默认采用的级别是 DEFAULT_ MESSAGE_LOGLEVEL（这个默认级别一般为<4>,即与KERN_WARNING在一个级别上），其定义在linux26/kernel/printk.c中可以找到</4></p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可用下面的命令设置当前日志级别：</span></span><br><span class="line"># echo <span class="number">8</span> &gt; <span class="regexp">/proc/</span>sys<span class="regexp">/kernel/</span>printk</span><br></pre></td></tr></table></figure>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可用下面的命令设置当前日志级别：</span></span><br><span class="line"><span class="preprocessor">#echo 8 &gt; /proc/sys/kernel/printk</span></span><br><span class="line">或运行下面命令直接查看信息</span><br><span class="line"><span class="preprocessor">#dmesg</span></span><br><span class="line">或者在printk中加上<span class="string">"&lt;0&gt;"</span></span><br><span class="line">printk(<span class="string">"&lt;0&gt;"</span><span class="string">"HelloWorld"</span>);</span><br></pre></td></tr></table></figure>
 <h6 id="原因2:_klogd和syslogd守护进程阻止内核消息(具体内容不是很清楚)">原因2: klogd和syslogd守护进程阻止内核消息(具体内容不是很清楚)</h6>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.weijinliang.cn/2015/04/09/Kernel-System-Call-Easy/" data-id="ci8a4j2kb000qfcmylsy0fp46" class="article-share-link">Share</a>
+      <a data-url="http://www.weijinliang.cn/2015/04/09/Kernel-System-Call-Easy/" data-id="ci8a5bw0i000qggmy2kivfol4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kernel/">Kernel</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Operationg-System/">Operationg System</a></li></ul>
@@ -192,7 +192,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.weijinliang.cn/2015/03/24/Mac-Enviroment-Variables/" data-id="ci8a4j2k3000afcmyd9mhcuyv" class="article-share-link">Share</a>
+      <a data-url="http://www.weijinliang.cn/2015/03/24/Mac-Enviroment-Variables/" data-id="ci8a5bw08000aggmy6n0a35sn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bash/">Bash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mac/">Mac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OSX10-10/">OSX10.10</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Terminal/">Terminal</a></li></ul>
@@ -743,7 +743,7 @@ _   底线
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.weijinliang.cn/2015/03/21/MarkDown-Syntax/" data-id="ci8a4j2jy0003fcmyoseea9of" class="article-share-link">Share</a>
+      <a data-url="http://www.weijinliang.cn/2015/03/21/MarkDown-Syntax/" data-id="ci8a5bw040003ggmyimxfsue5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Repost/">Repost</a></li></ul>
@@ -797,7 +797,7 @@ _   底线
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.weijinliang.cn/2015/03/21/Hexo/" data-id="ci8a4j2kg000wfcmyypcs9mew" class="article-share-link">Share</a>
+      <a data-url="http://www.weijinliang.cn/2015/03/21/Hexo/" data-id="ci8a5bw0o000wggmyg46l97nu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
@@ -971,7 +971,7 @@ mv test test_rename        <span class="comment">//重命名,将文件改名转�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.weijinliang.cn/2015/03/21/Linux-C-Programming/" data-id="ci8a4j2k7000lfcmyppmrxwjl" class="article-share-link">Share</a>
+      <a data-url="http://www.weijinliang.cn/2015/03/21/Linux-C-Programming/" data-id="ci8a5bw0d000lggmymxo7kpg2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
@@ -1027,7 +1027,7 @@ mv test test_rename        <span class="comment">//重命名,将文件改名转�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.weijinliang.cn/2015/03/21/Big-Little-Endian/" data-id="ci8a4j2kj0010fcmyzga7zzt3" class="article-share-link">Share</a>
+      <a data-url="http://www.weijinliang.cn/2015/03/21/Big-Little-Endian/" data-id="ci8a5bw0s0010ggmyk2r1cacg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Main-Memmory/">Main-Memmory</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Operating-System/">Operating-System</a></li></ul>
@@ -1074,7 +1074,7 @@ mv test test_rename        <span class="comment">//重命名,将文件改名转�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.weijinliang.cn/2015/03/20/hello-world/" data-id="ci8a4j2is0000fcmy9xe56160" class="article-share-link">Share</a>
+      <a data-url="http://www.weijinliang.cn/2015/03/20/hello-world/" data-id="ci8a5bvz20000ggmyeqn0s8w5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Other/">Other</a></li></ul>

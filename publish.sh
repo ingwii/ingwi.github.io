@@ -10,7 +10,7 @@ function process(){
 	hexo generate
 	hexo deploy
 	sleep 1
-	git add .
+	git add --all
 	git commit -m -a
 	git push origin source
 }
